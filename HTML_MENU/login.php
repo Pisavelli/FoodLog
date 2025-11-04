@@ -1,23 +1,18 @@
 <?php
-// login.php
 session_start();
-include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php'; // ajuste o caminho conforme necessário
+include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
     $senha = $_POST['senha'];
 
-    // Evita SQL Injection
-    $email = mysqli_real_escape_string($conn, $email);
-
-    // Consulta usuário pelo email
+    // Consulta usuário
     $sql = "SELECT * FROM usuarios WHERE email = '$email' LIMIT 1";
     $resultado = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($resultado) === 1) {
         $usuario = mysqli_fetch_assoc($resultado);
 
-        // Verifica a senha hash
         if (password_verify($senha, $usuario['senha'])) {
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
             $_SESSION['nome_usuario'] = $usuario['nome_usuario'];
@@ -30,6 +25,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: dashboard_estabelecimento.php');
             }
             exit;
+        }
+
+
+            // Se marcou "lembrar minha senha"
+            if(isset($_POST['lembrar'])) {
+                $token = bin2hex(random_bytes(32));
+                $expiracao = date('Y-m-d H:i:s', strtotime('+30 days'));
+
+                $stmt = $conn->prepare("INSERT INTO tokens_login (id_usuario, token, expiracao) VALUES (?, ?, ?)");
+                $stmt->bind_param("iss", $usuario['id_usuario'], $token, $expiracao);
+                $stmt->execute();
+
+                setcookie("remember_me", $token, time() + (30*24*60*60), "/", "", false, true);
+            }
+
+            header('Location: dashboard.php');
+            exit;
         } else {
             $erro = "Email ou senha incorretos!";
         }
@@ -38,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -83,15 +97,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="remember-password">
                 <label>
-                    <input type="checkbox">
+                    <input type="checkbox" name="lembrar">
                     Lembrar minha senha
                 </label>
             </div>
+
             <button class="login" type="submit"> Login </button>
 
             <div class="register-link">
+                <p><a href="../php/esqueci_senha.php">Esqueci minha senha</a></p>
                 <p>Não tem uma conta? <a href="escolha_cadastro.html">Cadastre-se</a></p>
-                <p><a href="recuperar_senha.php">Esqueci minha senha</a></p>
             </div>
         </div>
     </form>
