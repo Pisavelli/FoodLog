@@ -1,5 +1,5 @@
 <?php
-include 'conexao.php'; // arquivo de conexão com o banco
+include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/PHP/conexao.php'; // arquivo de conexão com o banco
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -63,26 +63,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="" method="POST">
             <input type="hidden" name="tipo" value="ong">
             <div class="container">
-                <h2 style="color: orange;">Cadastrar ONG</h2>
+                <h2 style="color: orange;">Informações Pessoais</h2>
                 <div class="input-box">
-                    <input placeholder="Nome da Organização" type="text" name="nome_organizacao" required>
+                    <input placeholder="Nome Completo" type="text" name="nome_usuario" required>
                     <i class="bx bxs-user"></i>
                 </div>
                 <div class="input-box">
-                    <input placeholder="Nome Completo do Usuário" type="text" name="nome_usuario" required>
-                    <i class="bx bxs-user"></i>
-                </div>
-                <div class="input-box">
-                    <input placeholder="CNPJ" type="text" name="cnpj" required>
+                    <input placeholder="CPF" type="text" name="cpf" required>
                 </div>
                 <div class="input-box">
                     <input placeholder="E-mail" type="email" name="email" required>
                     <i class="material-icons">email</i>
                 </div>
+                
+                <h2 style="color: orange;">Informações Legais</h2>
                 <div class="input-box">
-                    <input placeholder="Telefone" type="text" name="telefone" required>
-                    <i class="material-icons">phone</i>
+                    <input placeholder="Nome da Organização" type="text" name="nome_organizacao" required>
+                    <i class="bx bxs-user"></i>
                 </div>
+                <div class="input-box">
+                    <input placeholder="CNPJ" type="text" name="cnpj" required>
+                </div>
+
                 <div class="input-box">
                     <input placeholder="Senha" type="password" name="senha" required>
                     <i class="bx bxs-lock-alt"></i>
