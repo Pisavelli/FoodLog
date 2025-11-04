@@ -1,34 +1,33 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/PHP/conexao.php'; // arquivo de conexão com o banco
+include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/PHP/conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Recebendo dados do formulário
-    $nome_organizacao = $_POST['nome_organizacao'];
+    // Dados do formulário
+    $nome_ong = $_POST['nome_ong'];
     $nome_usuario = $_POST['nome_usuario'];
-    $cnpj = $_POST['cnpj'];
+    $cpf = $_POST['cpf'];
     $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
-    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT); // criptografa a senha
-    $tipo = $_POST['tipo']; // 'ong'
+    $data_nascimento = $_POST['data_nascimento'];
+    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+    $tipo = $_POST['tipo']; // 'estabelecimento'
 
     // Inserindo ONG
     $stmt = $conn->prepare("INSERT INTO ongs (nome_ong, cnpj) VALUES (?, ?)");
-    $stmt->bind_param("ss", $nome_organizacao, $cnpj);
-    
+    $stmt->bind_param("ss", $nome_ong, $_POST['cnpj']);
+
     if ($stmt->execute()) {
-        $id_ong = $stmt->insert_id; // pega o id da ONG recém-criada
+        $id_ong = $stmt->insert_id;
 
         // Inserindo usuário vinculado à ONG
-        $stmt2 = $conn->prepare("INSERT INTO usuarios (nome_usuario, email, senha, tipo_usuario, id_ong) VALUES (?, ?, ?, ?, ?)");
-        $stmt2->bind_param("ssssi", $nome_usuario, $email, $senha, $tipo, $id_ong);
+        $stmt2 = $conn->prepare("INSERT INTO usuarios (nome_usuario, cpf, email, data_nascimento, senha, tipo_usuario, id_ong) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt2->bind_param("ssssssi", $nome_usuario, $cpf, $email, $data_nascimento, $senha, $tipo, $id_ong);
         $stmt2->execute();
 
         echo "<p style='color:green'>Cadastro realizado com sucesso!</p>";
     } else {
         echo "<p style='color:red'>Erro ao cadastrar: " . $stmt->error . "</p>";
     }
-
 }
 ?>
 
