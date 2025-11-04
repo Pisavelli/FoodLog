@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,17 @@
   <title>Carrinho - FoodLog</title>
 
 </head>
+
 <body>
   <header>
     <div class="header-inner">
       <h1>FoodLog</h1>
       <nav>
         <ul>
-            <li><a href="carrinho.html">Carrinho</a></li>
-            <li><a href="produtos-disponiveis.html">Produtos Disponíveis</a></li>
-            <li><a href="inicio-ong.html">Início</a></li>
-            <li><a href="../HTML MENU/home.html">Sair</a></li>
+          <li><a href="carrinho.html">Carrinho</a></li>
+          <li><a href="produtos-disponiveis.html">Produtos Disponíveis</a></li>
+          <li><a href="inicio-ong.html">Início</a></li>
+          <li><a href="../HTML MENU/home.html">Sair</a></li>
         </ul>
       </nav>
     </div>
@@ -78,22 +80,23 @@
 
     const finalizeOrderBtn = document.getElementById('finalize-order');
 
-        finalizeOrderBtn.addEventListener('click', () => {
-        if (cart.length === 0) {
-            alert('Seu carrinho está vazio.');
-            return;
-        }
+    finalizeOrderBtn.addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Seu carrinho está vazio.');
+        return;
+      }
 
-        const pedidos = JSON.parse(localStorage.getItem('pedidosRecebidos')) || [];
-        pedidos.push(cart); // adiciona o carrinho como um novo pedido
-        localStorage.setItem('pedidosRecebidos', JSON.stringify(pedidos));
-        localStorage.setItem('pedidoFinalizado', 'true');
+      const pedidos = JSON.parse(localStorage.getItem('pedidosRecebidos')) || [];
+      pedidos.push(cart); // adiciona o carrinho como um novo pedido
+      localStorage.setItem('pedidosRecebidos', JSON.stringify(pedidos));
+      localStorage.setItem('pedidoFinalizado', 'true');
 
-        localStorage.removeItem('cart');
-        window.location.href = 'pedido-enviado.html';
-        });
+      localStorage.removeItem('cart');
+      window.location.href = 'pedido-enviado.html';
+    });
 
 
   </script>
 </body>
+
 </html>

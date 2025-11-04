@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <title>Notificações - Restaurante</title>
 
 </head>
+
 <body>
   <header>
     <div class="header-inner">
@@ -27,26 +29,26 @@
 
   <div class="card-container" id="pedido-list"></div>
 
-        <script>
-        const pedidoFinalizado = localStorage.getItem('pedidoFinalizado');
-        const container = document.getElementById('pedido-list');
+  <script>
+    const pedidoFinalizado = localStorage.getItem('pedidoFinalizado');
+    const container = document.getElementById('pedido-list');
 
-        const pedidos = JSON.parse(localStorage.getItem('pedidosRecebidos')) || [];
+    const pedidos = JSON.parse(localStorage.getItem('pedidosRecebidos')) || [];
 
-        if (pedidos.length === 0) {
-            container.innerHTML = '<p style="text-align:center;">Nenhum pedido recebido até agora.</p>';
-        } else {
-            pedidos.forEach((pedido, pedidoIndex) => {
-            const pedidoHeader = document.createElement('h3');
-            pedidoHeader.textContent = `Pedido #${pedidoIndex + 1}`;
-            pedidoHeader.style.textAlign = 'center';
-            pedidoHeader.style.marginTop = '30px';
-            container.appendChild(pedidoHeader);
+    if (pedidos.length === 0) {
+      container.innerHTML = '<p style="text-align:center;">Nenhum pedido recebido até agora.</p>';
+    } else {
+      pedidos.forEach((pedido, pedidoIndex) => {
+        const pedidoHeader = document.createElement('h3');
+        pedidoHeader.textContent = `Pedido #${pedidoIndex + 1}`;
+        pedidoHeader.style.textAlign = 'center';
+        pedidoHeader.style.marginTop = '30px';
+        container.appendChild(pedidoHeader);
 
-            pedido.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
+        pedido.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
                 <img src="${product.imageUrl}" alt="${product.name}" />
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
@@ -54,14 +56,15 @@
                 <p><strong>Quantidade:</strong> ${product.quantity}</p>
                 <p><strong>Cadastrado em:</strong> ${product.cadastro}</p>
                 `;
-                container.appendChild(card);
-            });
-            });
-        }
+          container.appendChild(card);
+        });
+      });
+    }
 
-        // Limpa apenas o sinal de nova notificação
-        localStorage.removeItem('pedidoFinalizado');
-        </script>
+    // Limpa apenas o sinal de nova notificação
+    localStorage.removeItem('pedidoFinalizado');
+  </script>
 
 </body>
+
 </html>

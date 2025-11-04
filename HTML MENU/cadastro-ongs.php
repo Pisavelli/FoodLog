@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <i class="material-icons">email</i>
                 </div>
                 
-                <h2 style="color: orange;">Informações Legais</h2>
+                <h2 style="color: orange;">Organização</h2>
                 <div class="input-box">
                     <input placeholder="Nome da Organização" type="text" name="nome_organizacao" required>
                     <i class="bx bxs-user"></i>

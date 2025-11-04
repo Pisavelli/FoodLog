@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../CSS/card.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
     <title>Restaurante - FoodLog</title>
-    
+
 </head>
+
 <body>
     <header>
         <div class="header-inner">
@@ -23,65 +25,62 @@
         </div>
     </header>
 
-        <div class="form">
-            <form id="product-form" enctype="multipart/form-data">
-                <h2>Cadastrar Produto</h2>
-                <input type="file" id="product-image" accept="image/*" required />
-                <input type="text" id="product-name" placeholder="Nome do produto" required />
-                <textarea id="product-description" placeholder="Descrição do produto" required></textarea>
-                <input type="date" id="product-validity" required />
-                <input type="text" id="product-quantity" placeholder="Quantidade em Kg, litros, ou unidade" required />
-                <button type="submit">Cadastrar</button>
-            </form>
-        </div>
+    <div class="form">
+        <form id="product-form" enctype="multipart/form-data">
+            <h2>Cadastrar Produto</h2>
+            <input type="file" id="product-image" accept="image/*" required />
+            <input type="text" id="product-name" placeholder="Nome do produto" required />
+            <textarea id="product-description" placeholder="Descrição do produto" required></textarea>
+            <input type="date" id="product-validity" required />
+            <input type="text" id="product-quantity" placeholder="Quantidade em Kg, litros, ou unidade" required />
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
 
-        <div class="card-container" id="product-list"></div>
+    <div class="card-container" id="product-list"></div>
 
-        
 
-        <script>
-            document.getElementById('product-form').addEventListener('submit', function(e) {
-                e.preventDefault();
 
-                const imageInput = document.getElementById('product-image');
-                const name = document.getElementById('product-name').value;
-                const description = document.getElementById('product-description').value;
-                const validity = document.getElementById('product-validity').value;
-                const quantity = document.getElementById('product-quantity').value;
+    <script>
+        document.getElementById('product-form').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-                const today = new Date();
-                const cadastro = today.toLocaleDateString('pt-BR');
+            const imageInput = document.getElementById('product-image');
+            const name = document.getElementById('product-name').value;
+            const description = document.getElementById('product-description').value;
+            const validity = document.getElementById('product-validity').value;
+            const quantity = document.getElementById('product-quantity').value;
 
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const imageUrl = event.target.result;
+            const today = new Date();
+            const cadastro = today.toLocaleDateString('pt-BR');
 
-                    const newProduct = {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const imageUrl = event.target.result;
+
+                const newProduct = {
                     name,
                     description,
                     validity,
                     quantity,
                     imageUrl,
                     cadastro
-                    };
-
-                    const products = JSON.parse(localStorage.getItem('products')) || [];
-                    products.push(newProduct);
-                    localStorage.setItem('products', JSON.stringify(products));
-
-                    window.location.href = 'meus-produtos.html';
                 };
 
-                reader.readAsDataURL(imageInput.files[0]);
-                });
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                products.push(newProduct);
+                localStorage.setItem('products', JSON.stringify(products));
 
-                const pedidoFinalizado = localStorage.getItem('pedidoFinalizado');
-                    if (pedidoFinalizado === 'true') {
-                    alert('Novo pedido recebido!');
-                    localStorage.removeItem('pedidoFinalizado');
-                    }
+                window.location.href = 'meus-produtos.html';
+            };
 
+            reader.readAsDataURL(imageInput.files[0]);
+        });
 
-        </script>
+        const pedidoFinalizado = localStorage.getItem('pedidoFinalizado');
+        if (pedidoFinalizado === 'true') {
+            alert('Novo pedido recebido!');
+            localStorage.removeItem('pedidoFinalizado');
+        }
+    </script>
 </body>
-
