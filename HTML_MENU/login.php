@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1>FoodLog</h1>
         <nav>
             <ul>
-                <li><a href="home.html">Início</a></li>
+                <li><a href="index.html">Início</a></li>
                 <li><a href="sobre.html">Sobre</a></li>
                 <li><a href="login.php">Login</a></li>
                 <li><a href="escolha_cadastro.html">Cadastro</a></li>
