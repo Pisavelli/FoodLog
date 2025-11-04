@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input placeholder="Senha" type="password" name="senha" required>
                     <i class="bx bxs-lock-alt"></i>
                 </div>
-                <button class="voltar" type="button" onclick="location.href='escolha-cadastro.html'"> Voltar </button>
+                <button class="voltar" type="button" onclick="location.href='escolha_cadastro.html'"> Voltar </button>
                 <button class="next-step" type="submit">Próximo Passo</button>
             </div>
         </form>
