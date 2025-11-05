@@ -1,5 +1,5 @@
 <?php
-$host = "localhost";
+$host = "localhost:3307";
 $user = "root";        // seu usuário do MySQL
 $pass = "";            // sua senha do MySQL
 $db   = "foodlog_db";  // nome do banco
