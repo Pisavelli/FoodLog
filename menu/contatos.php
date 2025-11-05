@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contato - FoodLog</title>
-    <link rel="stylesheet" href="../css/contatos.css">
+    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/contatos.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
 </head>
 
@@ -15,12 +15,12 @@
             <h1> FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="sobre.php">Sobre</a></li>
                     <li><a href="login.php">Login</a></li>
-                    <li><a href="escolha_cadastro.html">Cadastro</a></li>
-                    <li><a href="contatos.html" class="active">Contato</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="escolha_cadastro.php">Cadastro</a></li>
+                    <li><a href="contatos.php">Contato</a></li>
+                    <li><a href="faq.php">FAQ</a></li>
                 </ul>
             </nav>
         </div>

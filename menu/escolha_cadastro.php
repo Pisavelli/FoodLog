@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/escolha-cadastro.css">
+    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/escolha-cadastro.css">
     <title>FoodLog - Cadastro</title>
 
 </head>
@@ -16,12 +16,12 @@
             <h1>FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="sobre.php">Sobre</a></li>
                     <li><a href="login.php">Login</a></li>
-                    <li><a href="escolha_cadastro.html">Cadastro</a></li>
-                    <li><a href="contatos.html">Contato</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="escolha_cadastro.php">Cadastro</a></li>
+                    <li><a href="contatos.php">Contato</a></li>
+                    <li><a href="faq.php">FAQ</a></li>
 
 
                 </ul>

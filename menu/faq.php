@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/faq.css">
+    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/faq.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
     <title>FAQ - FoodLog</title>
 </head>
@@ -15,12 +15,12 @@
             <h1>FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="sobre.php">Sobre</a></li>
                     <li><a href="login.php">Login</a></li>
-                    <li><a href="escolha_cadastro.html">Cadastro</a></li>
-                    <li><a href="contatos.html">Contato</a></li>
-                    <li><a href="faq.html" class="active">FAQ</a></li>
+                    <li><a href="escolha_cadastro.php">Cadastro</a></li>
+                    <li><a href="contatos.php">Contato</a></li>
+                    <li><a href="faq.php">FAQ</a></li>
                 </ul>
             </nav>
         </div>
@@ -97,7 +97,7 @@
         <section class="faq-item">
             <h3>📞 Como entrar em contato com suporte?</h3>
             <p>Em caso de dúvidas técnicas sobre o uso da plataforma, entre em contato pelo nosso canal de suporte:
-                <strong><a href="contatos.html">Contato</a>.</strong>
+                <strong><a href="contatos.php">Contato</a>.</strong>
             </p>
         </section>
 

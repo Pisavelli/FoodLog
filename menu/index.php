@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/home.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
     <title>FoodLog Início</title>
 </head>
@@ -16,12 +16,12 @@
             <h1>FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="sobre.php">Sobre</a></li>
                     <li><a href="login.php">Login</a></li>
-                    <li><a href="escolha_cadastro.html">Cadastro</a></li>
-                    <li><a href="contatos.html">Contato</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="escolha_cadastro.php">Cadastro</a></li>
+                    <li><a href="contatos.php">Contato</a></li>
+                    <li><a href="faq.php">FAQ</a></li>
 
 
                 </ul>
@@ -34,7 +34,7 @@
             <h2>Bem-vindo ao FoodLog!</h2>
             <p>O FoodLog conecta estebelecimentos e ONGs para distribuir alimentos de forma eficiente, ajudando quem
                 mais precisa.</p>
-            <a href="escolha_cadastro.html" class="btn-cta">Cadastre-se</a>
+            <a href="escolha_cadastro.php" class="btn-cta">Cadastre-se</a>
         </section>
 
         <section class="how-it-works">

@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Redireciona dependendo do tipo
             if ($_SESSION['tipo'] === 'ong') {
-                header('Location: ../html_pos_login_ong/dashboard_ong.php');
+                header('Location: ../pos_login_ong/dashboard_ong.php');
             } else {
-                header('Location: ../html_pos_login_estabelecimento/dashboard_estabelecimento.php');
+                header('Location: ../pos_login_estabelecimento/dashboard_estabelecimento.php');
             }
             exit;
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/stylelogin.css">
+    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/stylelogin.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
     <title>FoodLog Login</title>
 </head>
@@ -62,12 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1>FoodLog</h1>
         <nav>
             <ul>
-                <li><a href="home.html">Início</a></li>
-                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="index.php">Início</a></li>
+                <li><a href="sobre.php">Sobre</a></li>
                 <li><a href="login.php">Login</a></li>
-                <li><a href="escolha_cadastro.html">Cadastro</a></li>
-                <li><a href="contatos.html">Contato</a></li>
-                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="escolha_cadastro.php">Cadastro</a></li>
+                <li><a href="contatos.php">Contato</a></li>
+                <li><a href="faq.php">FAQ</a></li>
             </ul>
         </nav>
     </div>
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="login" type="submit"> Login </button>
 
             <div class="register-link">
-                <p>Não tem uma conta? <a href="escolha_cadastro.html">Cadastre-se</a></p>
+                <p>Não tem uma conta? <a href="escolha_cadastro.php">Cadastre-se</a></p>
             </div>
         </div>
     </form>

@@ -19,8 +19,8 @@ if(!isset($_SESSION['id_usuario'])) {
 <?php elseif($_SESSION['tipo'] === 'estabelecimento'): ?>
     <h2>Menu Estabelecimento</h2>
     <ul>
-        <li><a href="listar_ongs.php">Listar ONGs</a></li>
-        <li><a href="cadastrar_produtos.php">Cadastrar Produtos</a></li>
+        <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/menu/listar_ongs.php">Listar ONGs</a></li>
+        <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/menu/cadastrar_produtos.php">Cadastrar Produtos</a></li>
     </ul>
 <?php endif; ?>
 

@@ -55,7 +55,7 @@ $result = mysqli_query($conn, "SELECT * FROM produto WHERE id_usuario = '$id_usu
         <h1>FoodLog - Meus Produtos</h1>
         <nav>
             <a href="inicio_restaurante.php">Cadastrar Produto</a>
-            <a href="../html_menu/home.html">Sair</a>
+            <a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/menu/index.php">Sair</a>
         </nav>
     </header>
 

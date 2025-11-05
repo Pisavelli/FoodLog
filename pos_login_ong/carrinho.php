@@ -11,10 +11,10 @@
         <h1>FoodLog</h1>
         <nav>
             <ul>
-                <li><a href="carrinho.php">Carrinho</a></li>
-                <li><a href="produtos_disponiveis.php">Produtos Disponíveis</a></li>
-                <li><a href="inicio-ong.php">Início</a></li>
-                <li><a href="../html_menu/home.html">Sair</a></li>
+                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
+                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
+                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/pos_login_ong/inicio-ong.php">Início</a></li>
+                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/menu/index.php">Sair</a></li>
             </ul>
         </nav>
     </div>
