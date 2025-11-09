@@ -49,7 +49,7 @@ if(!isset($_SESSION['id_usuario'])) {
 <body>
     <header>
         <div class="header-inner">
-            <h1>FoodLog - Estabelecimento</h1>
+            <h1>Dashboard - Estabelecimento</h1>
             <nav>
                 <ul>
                     <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Início</a></li>
