@@ -1,71 +1,8 @@
 <?php
 session_start();
 include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';
-
-if (!isset($_SESSION['id_usuario'])) {
-    die("Você precisa estar logado para acessar esta página.");
-}
-
-$id_usuario = $_SESSION['id_usuario'];
-$mensagem = "";
-
-// Busca dados antigos
-$sql = "SELECT nome_usuario, cpf, data_nascimento, senha FROM usuarios WHERE id_usuario = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_usuario);
-$stmt->execute();
-$result = $stmt->get_result();
-$usuario_antigo = $result->fetch_assoc();
-$stmt->close();
-
-// Atualização dos dados
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nome = trim($_POST["nome_usuario"] ?? '');
-    $cpf = preg_replace('/\D/', '', $_POST["cpf"] ?? '');
-    $data_nascimento = $_POST["data_nascimento"] ?? '';
-    $senha = $_POST["senha"] ?? '';
-
-    if (strlen($nome) < 2) {
-        $mensagem = "❌ Nome inválido.";
-    } elseif (!preg_match('/^\d{11}$/', $cpf)) {
-        $mensagem = "❌ CPF inválido.";
-    } elseif (strtotime($data_nascimento) > time()) {
-        $mensagem = "❌ Data de nascimento não pode ser futura.";
-    } else {
-        if (!empty($senha)) {
-            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-            $sql = "UPDATE usuarios 
-                    SET nome_usuario=?, cpf=?, data_nascimento=?, senha=? 
-                    WHERE id_usuario=?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssi", $nome, $cpf, $data_nascimento, $senha_hash, $id_usuario);
-        } else {
-            $sql = "UPDATE usuarios 
-                    SET nome_usuario=?, cpf=?, data_nascimento=? 
-                    WHERE id_usuario=?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssi", $nome, $cpf, $data_nascimento, $id_usuario);
-        }
-
-        if ($stmt->execute()) {
-            $mensagem = "✅ Dados atualizados com sucesso!";
-        } else {
-            $mensagem = "❌ Erro ao atualizar: " . $conn->error;
-        }
-        $stmt->close();
-    }
-}
-
-// Recarrega os dados
-$sql = "SELECT nome_usuario, cpf, data_nascimento FROM usuarios WHERE id_usuario = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_usuario);
-$stmt->execute();
-$result = $stmt->get_result();
-$usuario = $result->fetch_assoc();
-$stmt->close();
-$conn->close();
 ?>
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -115,10 +52,13 @@ $conn->close();
             <div class="contact-container">
                 <div class="contact-card">
                     <h3>E-mail</h3>
-                    <p>joao.costa8@pucpr.edu.br</p>
-                    <p>matheus.alievi@pucpr.edu.br</p>
-                    <p>pierre.cardoso@pucpr.edu.br</p>
-                    <p>robency.michel@pucpr.edu.br</p>
+                    <a href="mailto:joao.costa8@pucpr.edu.br">joao.costa8@pucpr.edu.br</a>
+                    <br>
+                    <a href="mailto:matheus.alievi@pucpr.edu.br">matheus.alievi@pucpr.edu.br</a>
+                    <br>
+                    <a href="mailto:pierre.cardoso@pucpr.edu.br">pierre.cardoso@pucpr.edu.br</a>
+                    <br>
+                    <a href="mailto:robency.michel@pucpr.edu.br">robency.michel@pucpr.edu.br</a>
                 </div>
                 <br>
                 <div class="contact-card">
