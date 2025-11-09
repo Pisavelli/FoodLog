@@ -123,7 +123,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <label>Validade</label>
             <input type="date" id="product-validity" name="product_validity" value="<?= isset($validade) ? htmlspecialchars($validade) : '' ?>" required />
 
-            <label>Quantidade</label>
+            <label>Quantidade em Estoque</label>
             <input type="number" id="product-quantity" name="product_quantity" min="1" value="<?= isset($quantidade) ? htmlspecialchars($quantidade) : '' ?>" required />
 
             <label>Unidade</label>

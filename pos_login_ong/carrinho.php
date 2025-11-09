@@ -1,8 +1,21 @@
+<?php
+session_start();
+include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';
+
+$carrinho = $_SESSION['carrinho'] ?? [];
+
+$produtos = [];
+if (!empty($carrinho)) {
+    $ids = implode(',', array_keys($carrinho));
+    $result = $conn->query("SELECT * FROM produtos WHERE id IN ($ids)");
+    $produtos = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Carrinho - FoodLog</title>
+    <title>Carrinho</title>
     <link rel="stylesheet" href="../css/card.css">
 </head>
 <body>
@@ -11,42 +24,31 @@
         <h1>FoodLog</h1>
         <nav>
             <ul>
-                <li><a href="/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
-                <li><a href="/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
-                <li><a href="/FoodLog/pos_login_ong/dashboard_ong.php">Atualizar Cadastro</a></li>
+                <li><a href="produtos_disponiveis.php">Produtos Disponíveis</a></li>
+                <li><a href="carrinho.php">Carrinho</a></li>
+                <li><a href="dashboard_ong.php">Atualizar Cadastro</a></li>
                 <li><a href="/FoodLog/menu/index.php">Sair</a></li>
             </ul>
         </nav>
     </div>
 </header>
 
-<h2 style="text-align:center; margin-top:20px;">Itens no Carrinho</h2>
-
-<form method="post" id="checkout-form">
-    <div class="card-container">
-        <?php
-        // Aqui você pode pegar os produtos do carrinho do banco ou da sessão
-        $cart = $_SESSION['cart'] ?? [];
-
-        if(empty($cart)){
-            echo '<p style="text-align:center;">Seu carrinho está vazio.</p>';
-        } else {
-            foreach($cart as $index => $product){
-                echo '<div class="card">';
-                echo '<img src="../IMAGENS/'.$product['imagem'].'" alt="'.$product['nome'].'">';
-                echo '<h3>'.$product['nome'].'</h3>';
-                echo '<p>'.$product['descricao'].'</p>';
-                echo '<p><strong>Validade:</strong> '.date('d/m/Y', strtotime($product['validade'])).'</p>';
-                echo '<p><strong>Quantidade:</strong> '.$product['quantidade'].'</p>';
-                echo '<input type="hidden" name="cart['.$index.'][id_produto]" value="'.$product['id'].'">';
-                echo '<input type="hidden" name="cart['.$index.'][quantidade]" value="'.$product['quantidade'].'">';
-                echo '<input type="hidden" name="cart['.$index.'][id_restaurante]" value="'.$product['id_restaurante'].'">';
-                echo '</div>';
-            }
-            echo '<button type="submit">Finalizar pedido</button>';
-        }
-        ?>
-    </div>
-</form>
+<h2>Seu Carrinho</h2>
+<?php if (empty($carrinho)): ?>
+    <p>Seu carrinho está vazio.</p>
+    <a href="produtos_disponiveis.php">Voltar aos produtos</a>
+<?php else: ?>
+    <ul>
+        <?php foreach ($produtos as $produto): ?>
+            <li>
+                <?= htmlspecialchars($produto['nome']) ?> - 
+                Quantidade escolhida: <?= $carrinho[$produto['id']] ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <form method="POST" action="finalizar.php">
+        <button type="submit" name="finalizar_pedido">Finalizar Pedido</button>
+    </form>
+<?php endif; ?>
 </body>
 </html>

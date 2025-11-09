@@ -11,11 +11,11 @@ if (!isset($_SESSION['id_usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $mensagem = "";
 
-// --- 1. Busca os dados atuais do usuário ---
+// --- 1. Busca os dados atuais do usuário e da ONG ---
 $stmt = $conn->prepare("
-    SELECT u.*, e.nome_estabelecimento, e.cnpj 
+    SELECT u.*, o.nome_ong, o.cnpj 
     FROM usuarios u 
-    LEFT JOIN estabelecimentos e ON u.id_estabelecimento = e.id_estabelecimento 
+    LEFT JOIN ongs o ON u.id_ong = o.id_ong 
     WHERE u.id_usuario = ?
 ");
 $stmt->bind_param("i", $id_usuario);
@@ -32,16 +32,16 @@ $stmt->close();
 // --- 2. Processa atualização ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nome_estabelecimento = trim($_POST['nome_estabelecimento']);
+    $nome_ong = trim($_POST['nome_ong']);
     $nome_usuario = trim($_POST['nome_usuario']);
     $cpf = trim($_POST['cpf']);
     $email = trim($_POST['email']);
     $data_nascimento = $_POST['data_nascimento'];
     $senha = !empty($_POST['senha']) ? password_hash($_POST['senha'], PASSWORD_DEFAULT) : $usuario['senha'];
 
-    // Atualiza Estabelecimento
-    $stmt = $conn->prepare("UPDATE estabelecimentos SET nome_estabelecimento = ?, cnpj = ? WHERE id_estabelecimento = ?");
-    $stmt->bind_param("ssi", $nome_estabelecimento, $_POST['cnpj'], $usuario['id_estabelecimento']);
+    // Atualiza ONG
+    $stmt = $conn->prepare("UPDATE ongs SET nome_ong = ?, cnpj = ? WHERE id_ong = ?");
+    $stmt->bind_param("ssi", $nome_ong, $_POST['cnpj'], $usuario['id_ong']);
     $stmt->execute();
     $stmt->close();
 
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mensagem = "✅ Cadastro atualizado com sucesso!";
 
         // Atualiza dados locais
-        $usuario['nome_estabelecimento'] = $nome_estabelecimento;
+        $usuario['nome_ong'] = $nome_ong;
         $usuario['nome_usuario'] = $nome_usuario;
         $usuario['cpf'] = $cpf;
         $usuario['email'] = $email;
@@ -74,60 +74,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../CSS/card.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
-    <title>Atualizar Cadastro - ONG</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../CSS/card.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+<title>Atualizar Cadastro - ONG</title>
+
+<!-- jQuery Mask Plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('#cpf').mask('000.000.000-00');       // Máscara para CPF
+    $('#cnpj').mask('00.000.000/0000-00');  // Máscara para CNPJ
+});
+</script>
+
 </head>
 <body>
-    <header>
-        <div class="header-inner">
-            <h1>FoodLog</h1>
-            <br>
-            <nav>
-                <ul>
-                    <li><a href="/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
-                    <li><a href="/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
-                    <li><a href="/FoodLog/pos_login_ong/dashboard_ong.php">Atualizar Cadastro</a></li>
-                    <li><a href="/FoodLog/menu/index.php">Sair</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<header>
+    <div class="header-inner">
+        <h1>FoodLog</h1>
+        <br>
+        <nav>
+            <ul>
+                <li><a href="/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
+                <li><a href="/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
+                <li><a href="/FoodLog/pos_login_ong/dashboard_ong.php">Atualizar Cadastro</a></li>
+                <li><a href="/FoodLog/menu/index.php">Sair</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-    <h2>Atualizar Cadastro</h2>
+<h2>Atualizar Cadastro</h2>
 
-    <?php if($mensagem): ?>
-        <p style="color: <?= strpos($mensagem,'✅') !== false ? 'green' : 'red' ?>"><?= htmlspecialchars($mensagem) ?></p>
-    <?php endif; ?>
+<?php if($mensagem): ?>
+<p style="color: <?= strpos($mensagem,'✅') !== false ? 'green' : 'red' ?>"><?= htmlspecialchars($mensagem) ?></p>
+<?php endif; ?>
 
-    <form method="POST">
-        <label>Nome do Estabelecimento</label>
-        <input type="text" name="nome_estabelecimento" value="<?= htmlspecialchars($usuario['nome_estabelecimento']) ?>" required />
-        
-        <label>CNPJ</label>
-        <input type="text" name="cnpj" value="<?= htmlspecialchars($usuario['cnpj']) ?>" required />
+<form method="POST">
+    <label>Nome da ONG</label>
+    <input type="text" name="nome_ong" value="<?= htmlspecialchars($usuario['nome_ong']) ?>" required />
 
-        <label>Nome do Usuário</label>
-        <input type="text" name="nome_usuario" value="<?= htmlspecialchars($usuario['nome_usuario']) ?>" required />
+    <label>CNPJ</label>
+    <input type="text" name="cnpj" id="cnpj" value="<?= htmlspecialchars($usuario['cnpj']) ?>" required />
 
-        <label>CPF</label>
-        <input type="text" name="cpf" value="<?= htmlspecialchars($usuario['cpf']) ?>" required />
+    <label>Nome do Usuário</label>
+    <input type="text" name="nome_usuario" value="<?= htmlspecialchars($usuario['nome_usuario']) ?>" required />
 
-        <label>E-mail</label>
-        <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required />
+    <label>CPF</label>
+    <input type="text" name="cpf" id="cpf" value="<?= htmlspecialchars($usuario['cpf']) ?>" required />
 
-        <label>Data de Nascimento</label>
-        <input type="date" name="data_nascimento" value="<?= htmlspecialchars($usuario['data_nascimento']) ?>" required />
+    <label>E-mail</label>
+    <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required />
 
-        <label>Senha (deixe em branco para não alterar)</label>
-        <input type="password" name="senha" placeholder="Nova senha" />
+    <label>Data de Nascimento</label>
+    <input type="date" name="data_nascimento" value="<?= htmlspecialchars($usuario['data_nascimento']) ?>" required />
 
-        <p>Tipo de usuário: <strong><?= htmlspecialchars($usuario['tipo_usuario']) ?></strong></p>
+    <label>Senha (deixe em branco para não alterar)</label>
+    <input type="password" name="senha" placeholder="Nova senha" />
 
-        <button type="submit">Atualizar Cadastro</button>
-    </form>
+    <p>Tipo de usuário: <strong><?= htmlspecialchars($usuario['tipo_usuario']) ?></strong></p>
 
+    <button type="submit">Atualizar Cadastro</button>
+</form>
 </body>
 </html>
