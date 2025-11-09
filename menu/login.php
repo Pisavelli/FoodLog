@@ -1,17 +1,21 @@
 <?php
-// login.php
 session_start();
 include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';
 
+$erro = "";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-    $sql = "SELECT * FROM usuarios WHERE email = '$email' LIMIT 1";
-    $resultado = mysqli_query($conn, $sql);
+    // Consulta segura
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? LIMIT 1");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-    if (mysqli_num_rows($resultado) === 1) {
-        $usuario = mysqli_fetch_assoc($resultado);
+    if ($resultado->num_rows === 1) {
+        $usuario = $resultado->fetch_assoc();
 
         if (password_verify($senha, $usuario['senha'])) {
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
@@ -23,18 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $token = bin2hex(random_bytes(32));
                 $expiracao = date('Y-m-d H:i:s', strtotime('+30 days'));
 
-                $stmt = $conn->prepare("INSERT INTO tokens_login (id_usuario, token, expiracao) VALUES (?, ?, ?)");
-                $stmt->bind_param("iss", $usuario['id_usuario'], $token, $expiracao);
-                $stmt->execute();
+                $stmtToken = $conn->prepare("INSERT INTO tokens_login (id_usuario, token, expiracao) VALUES (?, ?, ?)");
+                $stmtToken->bind_param("iss", $usuario['id_usuario'], $token, $expiracao);
+                $stmtToken->execute();
 
                 setcookie("remember_me", $token, time() + (30*24*60*60), "/", "", false, true);
             }
 
             // Redireciona dependendo do tipo
             if ($_SESSION['tipo'] === 'ong') {
-                header('Location: ../pos_login_ong/dashboard_ong.php');
+                header('Location: /FoodLog/pos_login_ong/dashboard_ong.php');
             } else {
-                header('Location: ../pos_login_estabelecimento/dashboard_estabelecimento.php');
+                header('Location: /FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php');
             }
             exit;
 
@@ -68,6 +72,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li><a href="escolha_cadastro.php">Cadastro</a></li>
                 <li><a href="contatos.php">Contato</a></li>
                 <li><a href="faq.php">FAQ</a></li>
+                <li>
+                  <a href="<?php 
+                    if(isset($_SESSION['tipo'])) {
+                      echo $_SESSION['tipo'] === 'ong' 
+                        ? '/FoodLog/pos_login_ong/dashboard_ong.php' 
+                        : '/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php';
+                    } else {
+                      echo 'login.php'; // fallback se não estiver logado
+                    }
+                  ?>">Dashboard</a>
+                </li>
             </ul>
         </nav>
     </div>

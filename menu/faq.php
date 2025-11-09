@@ -21,6 +21,17 @@
                     <li><a href="escolha_cadastro.php">Cadastro</a></li>
                     <li><a href="contatos.php">Contato</a></li>
                     <li><a href="faq.php">FAQ</a></li>
+                    <li>
+                    <a href="<?php 
+                        if(isset($_SESSION['tipo'])) {
+                        echo $_SESSION['tipo'] === 'ong' 
+                            ? 'pos_login_ong/dashboard_ong.php' 
+                            : 'pos_login_estabelecimento/dashboard_estabelecimento.php';
+                        } else {
+                        echo 'login.php'; // fallback se não estiver logado
+                        }
+                    ?>">Dashboard</a>
+                    </li>
                 </ul>
             </nav>
         </div>

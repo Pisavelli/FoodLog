@@ -9,16 +9,7 @@ if (!isset($_SESSION['id_usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $mensagem = "";
 
-// Busca dados antigos
-$sql = "SELECT nome_usuario, cpf, data_nascimento, senha FROM usuarios WHERE id_usuario = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_usuario);
-$stmt->execute();
-$result = $stmt->get_result();
-$usuario_antigo = $result->fetch_assoc();
-$stmt->close();
-
-// Atualização dos dados
+// --- Processa o formulário ---
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome = trim($_POST["nome_usuario"] ?? '');
     $cpf = preg_replace('/\D/', '', $_POST["cpf"] ?? '');
@@ -52,11 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $mensagem = "❌ Erro ao atualizar: " . $conn->error;
         }
+
         $stmt->close();
     }
 }
 
-// Recarrega os dados
+// --- Busca dados do usuário ---
 $sql = "SELECT nome_usuario, cpf, data_nascimento FROM usuarios WHERE id_usuario = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_usuario);
@@ -66,17 +58,17 @@ $usuario = $result->fetch_assoc();
 $stmt->close();
 $conn->close();
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Configurações - FoodLog</title>
-<link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/configuracoes.css">
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - FoodLog</title>
+    <link rel="stylesheet" href="/FoodLog/css/configuracoes.css">
 </head>
-
 <body>
+
 <header>
     <div class="header-inner">
         <h1>FoodLog</h1>
@@ -105,45 +97,44 @@ $conn->close();
 </header>
 
 <main>
-<section class="config">
-    <h2>Configurações da Conta</h2>
-    <p style="text-align:center; max-width:800px; margin:0 auto;">
-        Atualize seus dados pessoais abaixo. Se não quiser alterar a senha, deixe o campo em branco.
-    </p>
+    <section class="config">
+        <h2>Configurações do Usuário</h2>
+        <p>Atualize seus dados pessoais abaixo. A senha é opcional e só será alterada se preenchida.</p>
 
-    <div class="config-container">
-        <div class="config-card">
-            <?php if ($mensagem): ?>
-                <div class="message <?= strpos($mensagem, '✅') !== false ? 'success' : 'error' ?>">
-                    <?= htmlspecialchars($mensagem) ?>
-                </div>
-            <?php endif; ?>
+        <?php if ($mensagem): ?>
+            <div class="message <?= strpos($mensagem, '✅') !== false ? 'success' : 'error' ?>">
+                <?= htmlspecialchars($mensagem) ?>
+            </div>
+        <?php endif; ?>
 
-            <form method="POST" action="">
-                <label for="nome_usuario">Nome completo</label>
-                <input type="text" id="nome_usuario" name="nome_usuario"
-                    value="<?= htmlspecialchars($usuario['nome_usuario']) ?>" required>
+        <div class="config-container">
+            <div class="config-card">
+                <form method="POST" action="">
+                    <label for="nome_usuario">Nome completo</label>
+                    <input type="text" id="nome_usuario" name="nome_usuario"
+                        value="<?= htmlspecialchars($usuario['nome_usuario']) ?>" required>
 
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" name="cpf" maxlength="14"
-                    value="<?= htmlspecialchars($usuario['cpf']) ?>" required>
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" maxlength="14"
+                        value="<?= htmlspecialchars($usuario['cpf']) ?>" required>
 
-                <label for="data_nascimento">Data de nascimento</label>
-                <input type="date" id="data_nascimento" name="data_nascimento"
-                    value="<?= htmlspecialchars($usuario['data_nascimento']) ?>" required>
+                    <label for="data_nascimento">Data de nascimento</label>
+                    <input type="date" id="data_nascimento" name="data_nascimento"
+                        value="<?= htmlspecialchars($usuario['data_nascimento']) ?>" required>
 
-                <label for="senha">Nova senha (opcional)</label>
-                <input type="password" id="senha" name="senha" placeholder="Digite nova senha">
+                    <label for="senha">Nova senha (deixe em branco se não quiser alterar)</label>
+                    <input type="password" id="senha" name="senha" placeholder="Digite nova senha">
 
-                <button type="submit">Salvar alterações</button>
-            </form>
+                    <button type="submit">Salvar alterações</button>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 </main>
 
 <footer>
     <strong>&copy; FoodLog 2025. Todos os direitos reservados.</strong>
 </footer>
+
 </body>
 </html>
