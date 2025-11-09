@@ -49,32 +49,18 @@ if(!isset($_SESSION['id_usuario'])) {
 <body>
     <header>
         <div class="header-inner">
-            <h1>FoodLog</h1>
+            <h1>FoodLog - Estabelecimento</h1>
             <nav>
                 <ul>
                     <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Início</a></li>
                     <li><a href="/FoodLog/pos_login_estabelecimento/notificacao.php">Notificações</a></li>
                     <li><a href="/FoodLog/pos_login_estabelecimento/meus_produtos.php">Meus Produtos</a></li>
-                    <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Cadastrar Produtos</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/cadastrar_produto.php">Cadastrar Produtos</a></li>
                     <li><a href="/FoodLog/menu/index.php">Sair</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-
-    <div class="form">
-        <form id="product-form" enctype="multipart/form-data">
-            <h2>Cadastrar Produto</h2>
-            <input type="file" id="product-image" name="product_image" accept="image/*" required />
-            <input type="text" id="product-name" name="product_name" placeholder="Nome do produto" required />
-            <textarea id="product-description" name="product_description" placeholder="Descrição do produto" required></textarea>
-            <input type="date" id="product-validity" name="product_validity" required />
-            <input type="text" id="product-quantity" name="product_quantity" placeholder="Quantidade em Kg, litros, ou unidade" required />
-            <button type="submit">Cadastrar</button>
-        </form>
-    </div>
-
-    <div class="card-container" id="product-list"></div>
 
     <script>
         document.getElementById('product-form').addEventListener('submit', function(e) {
