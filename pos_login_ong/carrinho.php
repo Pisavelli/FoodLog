@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrinho - FoodLog</title>
-    <link rel="stylesheet" href="/FoodLog/css/card.css">
+    <link rel="stylesheet" href="../css/card.css">
 </head>
 <body>
 <header>
@@ -11,10 +11,10 @@
         <h1>FoodLog</h1>
         <nav>
             <ul>
-                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
-                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
-                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/pos_login_ong/inicio-ong.php">Início</a></li>
-                <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/menu/index.php">Sair</a></li>
+                <li><a href="/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
+                <li><a href="/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
+                <li><a href="/FoodLog/pos_login_ong/dashboard_ong.php">Atualizar Cadastro</a></li>
+                <li><a href="/FoodLog/menu/index.php">Sair</a></li>
             </ul>
         </nav>
     </div>
@@ -33,7 +33,7 @@
         } else {
             foreach($cart as $index => $product){
                 echo '<div class="card">';
-                echo '<img src="/FoodLog/img/'.$product['imagem'].'" alt="'.$product['nome'].'">';
+                echo '<img src="../IMAGENS/'.$product['imagem'].'" alt="'.$product['nome'].'">';
                 echo '<h3>'.$product['nome'].'</h3>';
                 echo '<p>'.$product['descricao'].'</p>';
                 echo '<p><strong>Validade:</strong> '.date('d/m/Y', strtotime($product['validade'])).'</p>';

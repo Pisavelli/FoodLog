@@ -74,10 +74,10 @@ $stmt->close();
         <h1>Dashboard - Estabelecimento</h1>
         <nav>
             <ul>
-                <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Início</a></li>
                 <li><a href="/FoodLog/pos_login_estabelecimento/notificacao.php">Notificações</a></li>
                 <li><a href="/FoodLog/pos_login_estabelecimento/meus_produtos.php">Meus Produtos</a></li>
-                <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Cadastrar Produtos</a></li>
+                <li><a href="/FoodLog/pos_login_estabelecimento/cadastrar_produto.php">Cadastrar Produtos</a></li>
+                <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Atualizar Cadastro</a></li>
                 <li><a href="/FoodLog/menu/index.php">Sair</a></li>
             </ul>
         </nav>

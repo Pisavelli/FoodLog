@@ -77,73 +77,63 @@ $conn->close();
 </head>
 
 <body>
-<header>
-    <div class="header-inner">
-        <h1>FoodLog</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Início</a></li>
-                <li><a href="sobre.php">Sobre</a></li>
-                <li><a href="login.php">Login</a></li>
-                <li><a href="escolha_cadastro.php">Cadastro</a></li>
-                <li><a href="contatos.php">Contato</a></li>
-                <li><a href="faq.php">FAQ</a></li>
-                <li>
-                  <a href="<?php 
-                    if(isset($_SESSION['tipo'])) {
-                      echo $_SESSION['tipo'] === 'ong' 
-                        ? 'pos_login_ong/dashboard_ong.php' 
-                        : 'pos_login_estabelecimento/dashboard_estabelecimento.php';
-                    } else {
-                      echo 'login.php'; // fallback se não estiver logado
-                    }
-                  ?>">Dashboard</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main>
-<section class="config">
-    <h2>Configurações da Conta</h2>
-    <p style="text-align:center; max-width:800px; margin:0 auto;">
-        Atualize seus dados pessoais abaixo. Se não quiser alterar a senha, deixe o campo em branco.
-    </p>
-
-    <div class="config-container">
-        <div class="config-card">
-            <?php if ($mensagem): ?>
-                <div class="message <?= strpos($mensagem, '✅') !== false ? 'success' : 'error' ?>">
-                    <?= htmlspecialchars($mensagem) ?>
-                </div>
-            <?php endif; ?>
-
-            <form method="POST" action="">
-                <label for="nome_usuario">Nome completo</label>
-                <input type="text" id="nome_usuario" name="nome_usuario"
-                    value="<?= htmlspecialchars($usuario['nome_usuario']) ?>" required>
-
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" name="cpf" maxlength="14"
-                    value="<?= htmlspecialchars($usuario['cpf']) ?>" required>
-
-                <label for="data_nascimento">Data de nascimento</label>
-                <input type="date" id="data_nascimento" name="data_nascimento"
-                    value="<?= htmlspecialchars($usuario['data_nascimento']) ?>" required>
-
-                <label for="senha">Nova senha (opcional)</label>
-                <input type="password" id="senha" name="senha" placeholder="Digite nova senha">
-
-                <button type="submit">Salvar alterações</button>
-            </form>
+    <header>
+        <div class="header-inner">
+            <h1> FoodLog</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="sobre.php">Sobre</a></li>
+                    <li><a href="login.php">Login</a></li>
+                    <li><a href="escolha_cadastro.php">Cadastro</a></li>
+                    <li><a href="contatos.php">Contato</a></li>
+                    <li><a href="faq.php">FAQ</a></li>
+                    <li>
+                    <a href="<?php 
+                        if(isset($_SESSION['tipo'])) {
+                        echo $_SESSION['tipo'] === 'ong' 
+                            ? 'pos_login_ong/dashboard_ong.php' 
+                            : 'pos_login_estabelecimento/dashboard_estabelecimento.php';
+                        } else {
+                        echo 'login.php'; // fallback se não estiver logado
+                        }
+                    ?>">Dashboard</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-    </div>
-</section>
-</main>
+    </header>
 
-<footer>
-    <strong>&copy; FoodLog 2025. Todos os direitos reservados.</strong>
-</footer>
+    <main>
+        <section class="contact">
+            <h2>Entre em Contato</h2>
+            <p style="text-align:center; max-width:800px; margin:0 auto;">
+                Estamos prontos para ajudar! Caso tenha dúvidas, sugestões ou queira se conectar com a FoodLog,
+                utilize um dos canais abaixo. Retornaremos o mais breve possível!
+            </p>
+
+            <div class="contact-container">
+                <div class="contact-card">
+                    <h3>E-mail</h3>
+                    <p>joao.costa8@pucpr.edu.br</p>
+                    <p>matheus.alievi@pucpr.edu.br</p>
+                    <p>pierre.cardoso@pucpr.edu.br</p>
+                    <p>robency.michel@pucpr.edu.br</p>
+                </div>
+                <br>
+                <div class="contact-card">
+                    <h3>Links Externos</h3>
+                    <p>
+                        <a href="https://github.com/Pisavelli/FoodLog" target="_blank">Portfólio GitHub</a><br>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <strong>&copy; FoodLog 2025. Todos os direitos reservados. </strong>
+    </footer>
 </body>
+
 </html>
