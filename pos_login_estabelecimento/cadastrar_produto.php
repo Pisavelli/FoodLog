@@ -92,10 +92,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="date" id="product-validity" name="product_validity" required />
 
         <label>Quantidade</label>
-        <input type="text" id="product-quantity" name="product_quantity" placeholder="Quantidade em Kg, litros, ou unidade" required />
+        <input type="number" id="product-quantity" name="product_quantity" placeholder="Quantidade" min="1" required />
+        <select id="product-unit" name="product_unit" required>
+            <option value="unidade">Unidade</option>
+            <option value="kg">Kg</option>
+            <option value="litro">Litro</option>
+            <option value="pacote">Pacote</option>
+        </select>
 
         <button type="submit">Cadastrar</button>
     </form>
 </div>
+
 </body>
 </html>
