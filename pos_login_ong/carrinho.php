@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrinho - FoodLog</title>
-    <link rel="stylesheet" href="../css/card.css">
+    <link rel="stylesheet" href="/FoodLog/css/card.css">
 </head>
 <body>
 <header>
@@ -33,7 +33,7 @@
         } else {
             foreach($cart as $index => $product){
                 echo '<div class="card">';
-                echo '<img src="../IMAGENS/'.$product['imagem'].'" alt="'.$product['nome'].'">';
+                echo '<img src="/FoodLog/img/'.$product['imagem'].'" alt="'.$product['nome'].'">';
                 echo '<h3>'.$product['nome'].'</h3>';
                 echo '<p>'.$product['descricao'].'</p>';
                 echo '<p><strong>Validade:</strong> '.date('d/m/Y', strtotime($product['validade'])).'</p>';
