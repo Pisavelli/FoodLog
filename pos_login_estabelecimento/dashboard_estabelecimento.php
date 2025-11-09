@@ -52,10 +52,11 @@ if(!isset($_SESSION['id_usuario'])) {
             <h1>FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="notificacao.php">Notificações</a></li>
-                    <li><a href="meus_produtos.php">Meus produtos</a></li>
-                    <li><a href="dashboard_estabelecimento.php">Cadastrar produtos</a></li>
-                    <li><a href="../HTML MENU/home.html">Sair</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Início</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/notificacao.php">Notificações</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/meus_produtos.php">Meus Produtos</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Cadastrar Produtos</a></li>
+                    <li><a href="/FoodLog/menu/index.php">Sair</a></li>
                 </ul>
             </nav>
         </div>

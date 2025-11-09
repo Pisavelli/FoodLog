@@ -2,7 +2,7 @@
 session_start();
 include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php'; 
 
-// Verifica se o usuário está logado
+// --- 1. Verifica se o usuário está logado ---
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: /FoodLog/menu/login.php");
     exit;
@@ -10,9 +10,8 @@ if (!isset($_SESSION['id_usuario'])) {
 
 $id_usuario = $_SESSION['id_usuario'];
 
-// --- Busca Segura dos Produtos (Prepared Statement) ---
-// Tabela: `produtos` (ajuste se for 'produto')
-$sql = "SELECT * FROM produtos WHERE id_usuario = ? ORDER BY data_cadastro DESC"; 
+// --- 2. Busca segura dos produtos do usuário ---
+$sql = "SELECT * FROM produtos WHERE id_usuario = ? ORDER BY cadastro DESC"; 
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
@@ -22,8 +21,19 @@ if ($stmt === false) {
 // Vincula o ID do usuário (parâmetro 'i' = integer)
 $stmt->bind_param("i", $id_usuario);
 $stmt->execute();
+
+// Obtém o resultado da query
 $result = $stmt->get_result(); 
 
+// --- 3. Armazena produtos em um array ---
+$produtos = [];
+while($produto = $result->fetch_assoc()) {
+    $produtos[] = $produto;
+}
+
+// --- 4. Fecha statement e conexão ---
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -41,10 +51,11 @@ $result = $stmt->get_result();
             <h1>FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="notificacao.php">Notificações</a></li>
-                    <li><a href="meus_produtos.php">Meus produtos</a></li>
-                    <li><a href="dashboard_estabelecimento.php">Cadastrar produtos</a></li>
-                    <li><a href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/menu/index.php">Sair</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Início</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/notificacao.php">Notificações</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/meus_produtos.php">Meus Produtos</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Cadastrar Produtos</a></li>
+                    <li><a href="/FoodLog/menu/index.php">Sair</a></li>
                 </ul>
             </nav>
         </div>
@@ -75,5 +86,5 @@ $result = $stmt->get_result();
     $conn->close();
     ?>
 </body>
-    <script src="../JS/card.js"></script>
+    <script src="/FoodLog/js/card.js"></script>
 </html>

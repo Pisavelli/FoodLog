@@ -1,37 +1,49 @@
 <?php
 session_start();
-include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';  // ajuste o caminho da sua conexão
+include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';  
 
 // Checar login do restaurante
 if(!isset($_SESSION['id_usuario'])){
-    header("Location: ../html_menu/login.php");
+    header("Location: /FoodLog/menu/login.php");
     exit;
 }
 
 $id_restaurante = $_SESSION['id_usuario'];
 
-// Buscar todos os pedidos para este restaurante
-$pedidos_sql = "SELECT p.id AS pedido_id, p.data_pedido, u.nome_completo AS ong_nome
-                FROM pedido p
-                JOIN usuario u ON u.id = p.id_ong
-                WHERE p.id_usuario = '$id_restaurante'
-                ORDER BY p.data_pedido DESC";
+// --- Buscar todos os pedidos deste restaurante ---
+$pedidos_sql = "
+    SELECT p.id AS pedido_id, p.data_pedido, u.nome_usuario AS ong_nome
+    FROM pedidos p
+    JOIN usuarios u ON u.id_usuario = p.id_ong
+    WHERE p.id_usuario = ?
+    ORDER BY p.data_pedido DESC
+";
 
-$pedidos_result = mysqli_query($conn, $pedidos_sql);
+$stmt = $conn->prepare($pedidos_sql);
+$stmt->bind_param("i", $id_restaurante);
+$stmt->execute();
+$pedidos_result = $stmt->get_result();
 
 $pedidos = [];
-while($pedido = mysqli_fetch_assoc($pedidos_result)){
+
+while($pedido = $pedidos_result->fetch_assoc()){
     $pedido_id = $pedido['pedido_id'];
 
-    // Buscar itens do pedido
-    $itens_sql = "SELECT prod.nome, prod.descricao, prod.validade, prod.quantidade AS estoque, prod.imagem, pi.quantidade AS quantidade_pedida
-                  FROM pedido_item pi
-                  JOIN produto prod ON prod.id = pi.id_produto
-                  WHERE pi.id_pedido = '$pedido_id'";
+    // --- Buscar itens do pedido ---
+    $itens_sql = "
+        SELECT pr.nome, pr.descricao, pr.validade, pr.quantidade AS estoque, pr.imagem, pi.quantidade AS quantidade_pedida
+        FROM pedido_item pi
+        JOIN produtos pr ON pr.id = pi.id_produto
+        WHERE pi.id_pedido = ?
+    ";
 
-    $itens_result = mysqli_query($conn, $itens_sql);
+    $itens_stmt = $conn->prepare($itens_sql);
+    $itens_stmt->bind_param("i", $pedido_id);
+    $itens_stmt->execute();
+    $itens_result = $itens_stmt->get_result();
+
     $itens = [];
-    while($item = mysqli_fetch_assoc($itens_result)){
+    while($item = $itens_result->fetch_assoc()){
         $itens[] = $item;
     }
 
@@ -41,24 +53,32 @@ while($pedido = mysqli_fetch_assoc($pedidos_result)){
         'ong_nome' => $pedido['ong_nome'],
         'itens' => $itens
     ];
+
+    $itens_stmt->close();
 }
+
+$stmt->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Notificações - Restaurante</title>
-    <link rel="stylesheet" href="../css/card.css">
+    <title>Notificações - Estabelecimento</title>
+    <link rel="stylesheet" href="/FoodLog/css/card.css">
 </head>
 <body>
 <header>
     <div class="header-inner">
-        <h1>FoodLog - Restaurante</h1>
+        <h1>FoodLog - Estabelecimento</h1>
         <nav>
             <ul>
-                <li><a href="inicio_restaurante.php">Início</a></li>
-                <li><a href="meus_produtos.php">Meus Produtos</a></li>
+                <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Início</a></li>
+                <li><a href="/FoodLog/pos_login_estabelecimento/notificacao.php">Notificações</a></li>
+                <li><a href="/FoodLog/pos_login_estabelecimento/meus_produtos.php">Meus Produtos</a></li>
+                <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Cadastrar Produtos</a></li>
+                <li><a href="/FoodLog/menu/index.php">Sair</a></li>
             </ul>
         </nav>
     </div>
