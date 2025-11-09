@@ -2,40 +2,128 @@
 session_start();
 include $_SERVER['DOCUMENT_ROOT'].'/FoodLog/php/conexao.php';
 
-// Se já não está logado, verifica cookie
-if(!isset($_SESSION['id_usuario']) && isset($_COOKIE['remember_me'])) {
-    $token = $_COOKIE['remember_me'];
-
-    $stmt = $conn->prepare("SELECT id_usuario, expiracao FROM tokens_login WHERE token = ? LIMIT 1");
-    $stmt->bind_param("s", $token);
-    $stmt->execute();
-    $res = $stmt->get_result();
-
-    if($res->num_rows === 1) {
-        $row = $res->fetch_assoc();
-        if(strtotime($row['expiracao']) > time()) {
-            // Cookie válido, cria sessão
-            $stmt2 = $conn->prepare("SELECT * FROM usuarios WHERE id_usuario = ? LIMIT 1");
-            $stmt2->bind_param("i", $row['id_usuario']);
-            $stmt2->execute();
-            $userRes = $stmt2->get_result()->fetch_assoc();
-
-            $_SESSION['id_usuario'] = $userRes['id_usuario'];
-            $_SESSION['nome_usuario'] = $userRes['nome_usuario'];
-            $_SESSION['tipo'] = $userRes['tipo_usuario'];
-        } else {
-            // Token expirado
-            setcookie("remember_me", "", time()-3600, "/");
-        }
-    } else {
-        // Token inválido
-        setcookie("remember_me", "", time()-3600, "/");
-    }
-}
-
-// Se ainda não está logado
-if(!isset($_SESSION['id_usuario'])) {
-    header('Location: login.php');
+// Proteção de página
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: /FoodLog/menu/login.php");
     exit;
 }
+
+$id_usuario = $_SESSION['id_usuario'];
+$mensagem = "";
+
+// --- 1. Busca os dados atuais do usuário ---
+$stmt = $conn->prepare("SELECT u.*, o.nome_estabelecimento, o.cnpj FROM usuarios u LEFT JOIN estabelecimentos o ON u.id_estabelecimento = o.id_estabelecimento WHERE u.id_usuario = ?");
+$stmt->bind_param("i", $id_usuario);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows !== 1) {
+    die("Usuário não encontrado.");
+}
+
+$usuario = $result->fetch_assoc();
+$stmt->close();
+
+// --- 2. Processa atualização ---
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nome_estabelecimento = trim($_POST['nome_estabelecimento']);
+    $nome_usuario = trim($_POST['nome_usuario']);
+    $cpf = trim($_POST['cpf']);
+    $email = trim($_POST['email']);
+    $data_nascimento = $_POST['data_nascimento'];
+    $senha = !empty($_POST['senha']) ? password_hash($_POST['senha'], PASSWORD_DEFAULT) : $usuario['senha'];
+
+    // Atualiza ONG
+    $stmt = $conn->prepare("UPDATE ongs SET nome_ong = ?, cnpj = ? WHERE id_ong = ?");
+    $stmt->bind_param("ssi", $nome_ong, $_POST['cnpj'], $usuario['id_ong']);
+    $stmt->execute();
+    $stmt->close();
+
+    // Atualiza usuário
+    $stmt2 = $conn->prepare("UPDATE usuarios SET nome_usuario = ?, cpf = ?, email = ?, data_nascimento = ?, senha = ? WHERE id_usuario = ?");
+    $stmt2->bind_param("sssssi", $nome_usuario, $cpf, $email, $data_nascimento, $senha, $id_usuario);
+
+    if ($stmt2->execute()) {
+        $mensagem = "✅ Cadastro atualizado com sucesso!";
+
+        // Atualiza dados locais
+        $usuario['nome_estabelecimento'] = $nome_estabelecimento;
+        $usuario['nome_usuario'] = $nome_usuario;
+        $usuario['cpf'] = $cpf;
+        $usuario['email'] = $email;
+        $usuario['data_nascimento'] = $data_nascimento;
+        $usuario['senha'] = $senha;
+        $usuario['cnpj'] = $_POST['cnpj'];
+
+        // Atualiza SESSION para refletir mudanças
+        $_SESSION['nome_usuario'] = $nome_usuario;
+    } else {
+        $mensagem = "❌ Erro ao atualizar cadastro: " . $stmt2->error;
+    }
+
+    $stmt2->close();
+}
 ?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/FoodLog/css/card.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+    <title>Atualizar Cadastro - Estabelecimento</title>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <h1>FoodLog</h1>
+            <br>
+            <nav>
+                <ul>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/notificacao.php">Notificações</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/meus_produtos.php">Meus Produtos</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/cadastrar_produto.php">Cadastrar Produtos</a></li>
+                    <li><a href="/FoodLog/pos_login_estabelecimento/dashboard_estabelecimento.php">Atualizar Cadastro</a></li>
+                    <li><a href="/FoodLog/menu/index.php">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <h2>Atualizar Cadastro</h2>
+
+    <?php if($mensagem): ?>
+        <p style="color: <?= strpos($mensagem,'✅') !== false ? 'green' : 'red' ?>"><?= htmlspecialchars($mensagem) ?></p>
+    <?php endif; ?>
+
+    <form method="POST">
+        <label>Nome da ONG</label>
+        <input type="text" name="nome_ong" value="<?= htmlspecialchars($usuario['nome_ong']) ?>" required />
+
+        <label>CNPJ</label>
+        <input type="text" name="cnpj" value="<?= htmlspecialchars($usuario['cnpj']) ?>" required />
+
+        <label>Nome do Usuário</label>
+        <input type="text" name="nome_usuario" value="<?= htmlspecialchars($usuario['nome_usuario']) ?>" required />
+
+        <label>CPF</label>
+        <input type="text" name="cpf" value="<?= htmlspecialchars($usuario['cpf']) ?>" required />
+
+        <label>E-mail</label>
+        <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required />
+
+        <label>Data de Nascimento</label>
+        <input type="date" name="data_nascimento" value="<?= htmlspecialchars($usuario['data_nascimento']) ?>" required />
+
+        <label>Senha (deixe em branco para não alterar)</label>
+        <input type="password" name="senha" placeholder="Nova senha" />
+
+        <p>Tipo de usuário: <strong><?= htmlspecialchars($usuario['tipo_usuario']) ?></strong></p>
+
+        <button type="submit">Atualizar Cadastro</button>
+    </form>
+
+</body>
+</html>

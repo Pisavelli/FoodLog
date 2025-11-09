@@ -16,10 +16,10 @@
             <h1>FoodLog</h1>
             <nav>
                 <ul>
-                    <li><a href="carrinho.php">Carrinho</a></li>
-                    <li><a href="produtos_disponiveis.html">Produtos Disponíveis</a></li>
-                    <li><a href="inicio_ong.html">Início</a></li>
-                    <li><a href="../html_menu/home.html">Sair</a></li>
+                    <li><a href="/FoodLog/pos_login_ong/produtos_disponiveis.php">Produtos Disponíveis</a></li>
+                    <li><a href="/FoodLog/pos_login_ong/carrinho.php">Carrinho</a></li>
+                    <li><a href="/FoodLog/pos_login_ong/dashboard_ong.php">Atualizar Cadastro</a></li>
+                    <li><a href="/FoodLog/menu/index.php">Sair</a></li>
                 </ul>
             </nav>
         </div>

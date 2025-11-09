@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/pages.css">
+    <link rel="stylesheet" href="<?php echo $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']; ?>/FoodLog/css/sobre.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
     <title>Sobre - FoodLog</title>
 </head>
@@ -21,8 +21,17 @@
                     <li><a href="escolha_cadastro.php">Cadastro</a></li>
                     <li><a href="contatos.php">Contato</a></li>
                     <li><a href="faq.php">FAQ</a></li>
-
-
+                    <li>
+                    <a href="<?php 
+                        if(isset($_SESSION['tipo'])) {
+                        echo $_SESSION['tipo'] === 'ong' 
+                            ? 'pos_login_ong/dashboard_ong.php' 
+                            : 'pos_login_estabelecimento/dashboard_estabelecimento.php';
+                        } else {
+                        echo 'login.php'; // fallback se não estiver logado
+                        }
+                    ?>">Dashboard</a>
+                    </li>
                 </ul>
             </nav>
         </div>

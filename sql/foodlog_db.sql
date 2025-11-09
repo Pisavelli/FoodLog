@@ -62,10 +62,10 @@ INSERT INTO `ongs` (`id_ong`, `nome_ong`, `cnpj`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pedido`
+-- Table structure for table `pedidos`
 --
 
-CREATE TABLE `pedido` (
+CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_ong` int(11) NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE `pedido_item` (
 -- Table structure for table `produto`
 --
 
-CREATE TABLE `produto` (
+CREATE TABLE `produtos` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `nome` varchar(255) NOT NULL,
