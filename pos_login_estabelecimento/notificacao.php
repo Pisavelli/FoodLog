@@ -65,7 +65,7 @@ $stmt->close();
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Notificações - Estabelecimento</title>
+    <title>FoodLog - Notificações</title>
     <link rel="stylesheet" href="/FoodLog/css/card.css">
 </head>
 <body>
